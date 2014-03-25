@@ -21,8 +21,13 @@ function createPlatforms()
 	{
 		//random Y value
 		ypos = Random.Range(-2,1);
+		//no overlap	
+		if (Physics.OverlapSphere(Vector3(playerX+5+i*5,ypos,0),1.5).Length==0)
+		{
 		//create six platforms ahead of the player and displaced by 5 from each other in X
 		Instantiate(nextPlatform,Vector3(playerX+5+i*5,ypos,0),Quaternion.identity);
+		}
+	
 	
 	}
 	
@@ -57,13 +62,13 @@ function OnCollisionExit(c:Collision)
 
 function Update () {
 Debug.Log(transform.position.x%24.0);
-	if (transform.position.x%24.0 < 0.1) {
+	if ((transform.position.x+10.0)%24.0 < 0.3) {
 		//create platforms
 		Debug.Log(transform.position.x%24.0);
 		Debug.Log("Create new platforms");
 		createPlatforms();
 		//to make sure that createPlatforms is called once, move the player forward slightly
-		transform.position.x += 0.1;
+		transform.position.x += 0.3;
 		
 	}
 
