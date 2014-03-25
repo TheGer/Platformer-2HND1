@@ -2,15 +2,39 @@
 //declare an animator object
 private var anim:Animator;
 private var OnGround:boolean;
-/*
-1. Declare a boolean variable OnGround
-2. If OnGround, the player can jump
-3. To Jump, when the player presses the up arrow, add a force of 1000 up, ForceMode.Impulse
-*/
+
+
+//the next platform to be generated at a random y
+
+var nextPlatform:Rigidbody;
+
+function createPlatforms()
+{
+	var playerX:int;
+	
+	var ypos:float;
+	
+	playerX = transform.position.x;
+	
+	//this for loop will run for six times
+	for (var i=0;i<7;i++)
+	{
+		//random Y value
+		ypos = Random.Range(-2,1);
+		//create six platforms ahead of the player and displaced by 5 from each other in X
+		Instantiate(nextPlatform,Vector3(playerX+5+i*5,ypos,0),Quaternion.identity);
+	
+	}
+	
+}
+
+
+
 function Start () {
 	//get the animation component of the player at the START of the game
 	anim = GetComponent(Animator);
 	OnGround = false;
+	transform.position.x = 1;
 }
 //started to hit ground
 function OnCollisionStay(c:Collision)
@@ -32,6 +56,17 @@ function OnCollisionExit(c:Collision)
 }
 
 function Update () {
+Debug.Log(transform.position.x%24.0);
+	if (transform.position.x%24.0 < 0.1) {
+		//create platforms
+		Debug.Log(transform.position.x%24.0);
+		Debug.Log("Create new platforms");
+		createPlatforms();
+		//to make sure that createPlatforms is called once, move the player forward slightly
+		transform.position.x += 0.1;
+		
+	}
+
 	Debug.Log(OnGround);
 	//falling force -100 down
 	rigidbody.AddForce(Vector3(0,-150,0),ForceMode.Acceleration);
